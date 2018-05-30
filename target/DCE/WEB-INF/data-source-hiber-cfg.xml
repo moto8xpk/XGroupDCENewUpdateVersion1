@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  <beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+    <bean id="myDataSource"
+      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+      <property name="url" value="jdbc:jtds:sqlserver://localhost:1433/DCE;instance=SQLEXPRESS" />
+      <property name="username" value="DCE" />
+      <property name="password" value="123456789" />
+  </bean>
+ 
+  <bean id="mySessionFactory"
+      class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+      <property name="dataSource" ref="myDataSource" />
+ 
+      <property name="annotatedClasses">
+          <list>
+              <value>webappgroup.webappartifact.entity.Class</value>
+              <value>webappgroup.webappartifact.entity.Question</value>
+              <value>webappgroup.webappartifact.entity.Department</value>
+          </list>
+      </property>
+ 
+      <property name="hibernateProperties">
+          <props>
+              <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+              <prop key="hibernate.show_sql">true</prop>
+          </props>
+      </property>
+  </bean> 
+  
+</beans>  -->
