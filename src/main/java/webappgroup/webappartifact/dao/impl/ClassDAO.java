@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Component;
 
-import webappgroup.webappartifact.entity.Class;
+import webappgroup.webappartifact.entity.Classes;
 
 @Component
 @Transactional
@@ -23,7 +23,7 @@ public class ClassDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<Class> getClassList() {
+	public List<Classes> getClassList() {
 		// List<Class> classlist = null;
 		// Session session = this.sessionFactory.getCurrentSession();
 		// String sql = "from Class ";

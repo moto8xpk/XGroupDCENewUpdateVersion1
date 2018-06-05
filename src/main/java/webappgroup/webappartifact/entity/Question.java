@@ -2,6 +2,8 @@ package webappgroup.webappartifact.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 
 import javax.persistence.Table;
@@ -22,7 +24,8 @@ public class Question {
 	private String classId;
 
 	@Id
-	@Column(name = "QuestionId")
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "QuestionId", unique = true, nullable = false)
 	public Integer getQuestionId() {
 		return questionId;
 	}
@@ -98,6 +101,19 @@ public class Question {
 			String answersD, String answer, String classId) {
 		super();
 		this.questionId = questionId;
+		this.questionContent = questionContent;
+		this.answersA = answersA;
+		this.answersB = answersB;
+		this.answersC = answersC;
+		this.answersD = answersD;
+		this.answer = answer;
+		this.classId = classId;
+	}
+	
+
+	public Question(String questionContent, String answersA, String answersB, String answersC, String answersD,
+			String answer, String classId) {
+		super();
 		this.questionContent = questionContent;
 		this.answersA = answersA;
 		this.answersB = answersB;

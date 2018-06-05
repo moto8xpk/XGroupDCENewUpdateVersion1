@@ -9,7 +9,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name="Class", uniqueConstraints={@UniqueConstraint(columnNames={"ClassId"})})
-public class Class {
+public class Classes {
 	private String ClassId;
 	private String ClassName;
 
@@ -31,18 +31,18 @@ public class Class {
 		ClassName = className;
 	}
 
-	public Class(String classId, String className) {
+	public Classes(String classId, String className) {
 		super();
 		ClassId = classId;
 		ClassName = className;
 	}
 
-	public Class(String classId) {
+	public Classes(String classId) {
 		super();
 		ClassId = classId;
 	}
 
-	public Class() {
+	public Classes() {
 		super();
 	}
 }

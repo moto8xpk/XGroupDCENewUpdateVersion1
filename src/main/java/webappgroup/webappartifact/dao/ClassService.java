@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import webappgroup.webappartifact.dao.impl.ClassDAO;
 
-import webappgroup.webappartifact.entity.Class;
+import webappgroup.webappartifact.entity.Classes;
 
 @Service
 public class ClassService {
@@ -15,7 +15,7 @@ public class ClassService {
 	@Autowired
 	private ClassDAO classDAOImpl;
 
-	public List<Class> getClasses() {
+	public List<Classes> getClasses() {
 		return classDAOImpl.getClassList();
 	}
 

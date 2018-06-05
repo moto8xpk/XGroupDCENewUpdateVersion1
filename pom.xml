@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId></groupId>
-	<artifactId></artifactId>
+	<groupId>webappartifactgroup</groupId>
+	<artifactId>DCE</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
 	
@@ -12,8 +12,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.7</jdk.version>
-		<spring.version></spring.version>
-		<springversion></springversion>
+		<spring.version>4.3.3.RELEASE</spring.version><!-- 4.3.3.RELEASE -->
+		<springversion>4.1.4.RELEASE</springversion>
 		<jstl.version>1.2</jstl.version>
 		<jcl.slf4j.version>1.7.12</jcl.slf4j.version>
 		<logback.version>1.1.3</logback.version>
@@ -106,11 +106,6 @@
 			<version>${org.javassist.version}</version>
 			<scope>compile</scope>
 		</dependency>
-	<!-- 	<dependency>
-			<groupId>net.sourceforge.jtds</groupId>
-			<artifactId>jtds</artifactId>
-			<version>1.3.1</version>
-		</dependency> -->
 		<!-- JSP API -->
 		<!-- http://mvnrepository.com/artifact/javax.servlet.jsp/jsp-api%20 -->
 		<dependency>
@@ -132,14 +127,6 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
-		<!-- Apache Commons FileUpload -->
-		<!-- http://mvnrepository.com/artifact/commons-fileupload/commons-fileupload%20 -->
-	<!-- 	<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.1</version>
-		</dependency> -->
 
 		<!-- Apache Commons IO -->
 		<!-- http://mvnrepository.com/artifact/commons-io/commons-io%20 -->

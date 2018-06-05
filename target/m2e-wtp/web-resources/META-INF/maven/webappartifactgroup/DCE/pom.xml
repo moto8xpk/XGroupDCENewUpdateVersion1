@@ -106,11 +106,6 @@
 			<version>${org.javassist.version}</version>
 			<scope>compile</scope>
 		</dependency>
-	<!-- 	<dependency>
-			<groupId>net.sourceforge.jtds</groupId>
-			<artifactId>jtds</artifactId>
-			<version>1.3.1</version>
-		</dependency> -->
 		<!-- JSP API -->
 		<!-- http://mvnrepository.com/artifact/javax.servlet.jsp/jsp-api%20 -->
 		<dependency>
@@ -132,14 +127,6 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
-		<!-- Apache Commons FileUpload -->
-		<!-- http://mvnrepository.com/artifact/commons-fileupload/commons-fileupload%20 -->
-	<!-- 	<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.1</version>
-		</dependency> -->
 
 		<!-- Apache Commons IO -->
 		<!-- http://mvnrepository.com/artifact/commons-io/commons-io%20 -->

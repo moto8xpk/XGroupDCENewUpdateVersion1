@@ -17,6 +17,16 @@ public class QuestionService {
 	public List<Question> getQuestions() {
 		return questionDAOImpl.getQuestionList();
 	}
-
+	public String getQuestionNumber() {
+		return questionDAOImpl.getQuestionCount();
+	}
+	
+	public void save(List<Question> questionList) {
+		questionDAOImpl.save(questionList);
+	}
+	
+	public void delete(Integer questionId) {
+		questionDAOImpl.delete(questionId);
+	}
 
 }

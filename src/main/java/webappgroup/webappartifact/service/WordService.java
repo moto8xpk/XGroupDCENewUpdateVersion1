@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.POIXMLDocumentPart;
@@ -59,23 +60,189 @@ public class WordService {
 		}
 	}
 
-	public static void readFileAllParagraphIncludeHighLine(XWPFDocument docx) throws IOException {
+//	public static List<String> readFileAllParagraphIncludeHighline(XWPFDocument docx) throws IOException {
+//		List<XWPFParagraph> paragraphList = docx.getParagraphs();
+//		List<String> paraRightAnswers = new ArrayList<String>();
+//		for (XWPFParagraph xwpfParagraph : paragraphList) {
+//			List<XWPFRun> runlist = xwpfParagraph.getRuns();
+//			for (XWPFRun xwpfRun : runlist) {
+//				if (xwpfRun != null) {
+//					if (xwpfRun.getCTR().getRPr() != null) {
+//						if (xwpfRun.getCTR().getRPr().getHighlight() != null) {
+//							if (xwpfRun.getCTR().getRPr().getHighlight().getVal().toString() == "yellow")
+//								paraRightAnswers.add(xwpfParagraph.getParagraphText());
+//							// System.out.println(xwpfParagraph.getParagraphText());
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return paraRightAnswers;
+//	}
+	
+	public static List<String> readFileAllParagraphIncludeHighline(XWPFDocument docx) {
+		int index = 0;
+		int indexList = 0;
+		int questionList = 1;
+		int answerList = 0;
+		int questionNum = 1;
+		int resetAnswer = 0;
+
+		String mainString = "";
+		String truncateString = "";
+		List<String> paraRightAnswers = new ArrayList<String>();
 		List<XWPFParagraph> paragraphList = docx.getParagraphs();
-		for (XWPFParagraph xwpfParagraph : paragraphList) {
-			List<XWPFRun> runlist = xwpfParagraph.getRuns();
-			for (XWPFRun xwpfRun : runlist) {
-				if (xwpfRun != null) {
-					if (xwpfRun.getCTR().getRPr() != null) {
-						if (xwpfRun.getCTR().getRPr().getHighlight() != null) {
-							if (xwpfRun.getCTR().getRPr().getHighlight().getVal().toString() == "yellow")
-								System.out.println("fuck");
+		for (int indexParagraph = 0; indexParagraph <= paragraphList.size() - 1; indexParagraph++) {
+			XWPFParagraph paragraph = paragraphList.get(indexParagraph);
+			if (paragraph != null) {
+				if (paragraph.getNumID() != null) {
+					// check indexList to print Part Exam
+					if (indexList == 0) {
+//						System.out.println(Constants.romanNumeral[indexList] + ". " + paragraph.getParagraphText());
+						index++;
+						indexList++;
+					} else
+					// check index=1,6,11 to print Question Number
+					if (index == questionList) {
+						// check next paragraph is null or not
+						if (paragraphList.get(indexParagraph + 1) != null) {
+							// check next paragraph has NumID and indexList > 0
+							if (paragraphList.get(indexParagraph + 1).getNumID() == null && indexList > 0) {
+								// loop for concate Question String
+								for (int indexPara = indexParagraph + 1; indexPara <= paragraphList.size()
+										- 1; indexPara++) {
+									// check next paragraph is null or not
+									if (paragraphList.get(indexPara) != null) {
+										// check next paragraph has NumID or not
+										if (paragraphList.get(indexPara).getNumID() == null) {
+											mainString = questionNum + ". " + paragraph.getParagraphText();
+											truncateString = truncateString + "\n"
+													+ paragraphList.get(indexPara).getParagraphText();
+											indexParagraph = indexPara;
+										} else {
+											break;
+										}
+									} else {
+										break;
+									}
+
+								}
+//								System.out.println(mainString + truncateString);
+							} else {
+//								System.out.println(questionNum + ". " + paragraph.getParagraphText());
+							}
+							mainString = "";
+							truncateString = "";
+						} else {
+							break;
+						}
+						questionNum++;
+						questionList = questionList + 5;
+						answerList = questionList - 4;
+						resetAnswer = 0;
+						index++;
+					} else
+					// check index=1,6,11 to print Question Number
+					if (index == answerList) {
+						if (!(indexParagraph == paragraphList.size() - 1)) {
+							// check next paragraph is null or not
+							if (paragraphList.get(indexParagraph + 1) != null) {
+								// check next paragraph has NumID and indexList > 0
+								if (paragraphList.get(indexParagraph + 1).getNumID() == null && indexList > 0) {
+									// loop for concate Question String
+									for (int indexPara = indexParagraph + 1; indexPara <= paragraphList.size()
+											- 1; indexPara++) {
+										// check next paragraph is null or not
+										if (paragraphList.get(indexPara) != null) {
+											// check next paragraph has NumID or not
+											if (paragraphList.get(indexPara).getNumID() == null) {
+												mainString = Constants.ANSWERS[resetAnswer] + ". "
+														+ paragraph.getParagraphText();
+												truncateString = truncateString + "\n"
+														+ paragraphList.get(indexPara).getParagraphText();
+												indexParagraph = indexPara;
+											} else {
+												break;
+											}
+										} else {
+											break;
+										}
+									}
+									List<XWPFRun> runlist = paragraphList.get(indexParagraph).getRuns();
+									for (XWPFRun xwpfRun : runlist) {
+										if (xwpfRun != null) {
+											if (xwpfRun.getCTR().getRPr() != null) {
+												if (xwpfRun.getCTR().getRPr().getHighlight() != null) {
+													if (xwpfRun.getCTR().getRPr().getHighlight().getVal()
+															.toString() == "yellow") {
+//														System.out.println(" this is the right answer ");
+														paraRightAnswers.add(mainString + truncateString);
+//														System.out.println(mainString + truncateString);
+														// System.out.println(xwpfParagraph.getParagraphText());
+													}
+												}
+											}
+										}
+									}
+//									System.out.println(mainString + truncateString);
+								} else {
+									List<XWPFRun> runlist = paragraphList.get(indexParagraph).getRuns();
+									for (XWPFRun xwpfRun : runlist) {
+										if (xwpfRun != null) {
+											if (xwpfRun.getCTR().getRPr() != null) {
+												if (xwpfRun.getCTR().getRPr().getHighlight() != null) {
+													if (xwpfRun.getCTR().getRPr().getHighlight().getVal()
+															.toString() == "yellow") {
+//														System.out.println(" this is the right answer ");
+//														System.out.println(
+//																Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+														paraRightAnswers.add(Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+														// System.out.println(xwpfParagraph.getParagraphText());
+													}
+												}
+											}
+										}
+									}
+//									System.out.println(
+//											Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+								}
+								mainString = "";
+								truncateString = "";
+							} else {
+								break;
+							}
+							answerList++;
+							resetAnswer++;
+							index++;
+						} else {
+							List<XWPFRun> runlist = paragraphList.get(indexParagraph).getRuns();
+							for (XWPFRun xwpfRun : runlist) {
+								if (xwpfRun != null) {
+									if (xwpfRun.getCTR().getRPr() != null) {
+										if (xwpfRun.getCTR().getRPr().getHighlight() != null) {
+											if (xwpfRun.getCTR().getRPr().getHighlight().getVal()
+													.toString() == "yellow") {
+//												System.out.println(
+//														Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+												paraRightAnswers.add(Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+//												System.out.println(" this is the right answer ");
+											}
+										}
+									}
+								}
+							}
+//							System.out.println(Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+							resetAnswer = 0;
 						}
 					}
+				} else {
+//					System.out.println(paragraph.getParagraphText());
 				}
 			}
-			System.out.println(xwpfParagraph.getParagraphText());
 		}
+		return paraRightAnswers;
 	}
+
 
 	public static void readFileAllParagraphWithNumId(XWPFDocument docx) {
 		int index = 0;
@@ -200,7 +367,7 @@ public class WordService {
 
 		String mainString = "";
 		String truncateString = "";
-		List<XWPFParagraph> paraTitleList = null;
+		List<XWPFParagraph> paraTitleList = new ArrayList<XWPFParagraph>();
 		List<XWPFParagraph> paragraphList = docx.getParagraphs();
 		for (int indexParagraph = 0; indexParagraph <= paragraphList.size() - 1; indexParagraph++) {
 			XWPFParagraph paragraph = paragraphList.get(indexParagraph);
@@ -208,7 +375,8 @@ public class WordService {
 				if (paragraph.getNumID() != null) {
 					// check indexList to print Part Exam
 					if (indexList == 0) {
-//						System.out.println(Constants.romanNumeral[indexList] + ". " + paragraph.getParagraphText());
+						// System.out.println(Constants.romanNumeral[indexList] + ". " +
+						// paragraph.getParagraphText());
 						paraTitleList.add(paragraph);
 						index++;
 						indexList++;
@@ -238,9 +406,9 @@ public class WordService {
 									}
 
 								}
-//								System.out.println(mainString + truncateString);
+								// System.out.println(mainString + truncateString);
 							} else {
-//								System.out.println(questionNum + ". " + paragraph.getParagraphText());
+								// System.out.println(questionNum + ". " + paragraph.getParagraphText());
 							}
 							mainString = "";
 							truncateString = "";
@@ -279,10 +447,10 @@ public class WordService {
 											break;
 										}
 									}
-//									System.out.println(mainString + truncateString);
+									// System.out.println(mainString + truncateString);
 								} else {
-//									System.out.println(
-//											Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+									// System.out.println(
+									// Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
 								}
 								mainString = "";
 								truncateString = "";
@@ -293,17 +461,19 @@ public class WordService {
 							resetAnswer++;
 							index++;
 						} else {
-//							System.out.println(Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+							// System.out.println(Constants.ANSWERS[resetAnswer] + ". " +
+							// paragraph.getParagraphText());
 							resetAnswer = 0;
 						}
 					}
 				} else {
-//					System.out.println(paragraph.getParagraphText());
+					// System.out.println(paragraph.getParagraphText());
 				}
 			}
 		}
 		return paraTitleList;
 	}
+
 	public static List<String> getAllQuestionContent(XWPFDocument docx) {
 		int index = 0;
 		int indexList = 0;
@@ -314,7 +484,7 @@ public class WordService {
 
 		String mainString = "";
 		String truncateString = "";
-		List<String> paraQuestionContentList = null;
+		List<String> paraQuestionContentList = new ArrayList<String>();
 		List<XWPFParagraph> paragraphList = docx.getParagraphs();
 		for (int indexParagraph = 0; indexParagraph <= paragraphList.size() - 1; indexParagraph++) {
 			XWPFParagraph paragraph = paragraphList.get(indexParagraph);
@@ -322,7 +492,8 @@ public class WordService {
 				if (paragraph.getNumID() != null) {
 					// check indexList to print Part Exam
 					if (indexList == 0) {
-//						System.out.println(Constants.romanNumeral[indexList] + ". " + paragraph.getParagraphText());
+						// System.out.println(Constants.romanNumeral[indexList] + ". " +
+						// paragraph.getParagraphText());
 						index++;
 						indexList++;
 					} else
@@ -339,7 +510,7 @@ public class WordService {
 									if (paragraphList.get(indexPara) != null) {
 										// check next paragraph has NumID or not
 										if (paragraphList.get(indexPara).getNumID() == null) {
-//											mainString = questionNum + ". " + paragraph.getParagraphText();
+											// mainString = questionNum + ". " + paragraph.getParagraphText();
 											mainString = paragraph.getParagraphText();
 											truncateString = truncateString + "\n"
 													+ paragraphList.get(indexPara).getParagraphText();
@@ -352,11 +523,11 @@ public class WordService {
 									}
 
 								}
-								paraQuestionContentList.add(mainString+truncateString);
-//								System.out.println(mainString + truncateString);
+								paraQuestionContentList.add(mainString + truncateString);
+								// System.out.println(mainString + truncateString);
 							} else {
 								paraQuestionContentList.add(paragraph.getParagraphText());
-//								System.out.println(questionNum + ". " + paragraph.getParagraphText());
+								// System.out.println(questionNum + ". " + paragraph.getParagraphText());
 							}
 							mainString = "";
 							truncateString = "";
@@ -395,10 +566,10 @@ public class WordService {
 											break;
 										}
 									}
-//									System.out.println(mainString + truncateString);
+									// System.out.println(mainString + truncateString);
 								} else {
-//									System.out.println(
-//											Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+									// System.out.println(
+									// Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
 								}
 								mainString = "";
 								truncateString = "";
@@ -409,17 +580,23 @@ public class WordService {
 							resetAnswer++;
 							index++;
 						} else {
-//							System.out.println(Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+							// System.out.println(Constants.ANSWERS[resetAnswer] + ". " +
+							// paragraph.getParagraphText());
 							resetAnswer = 0;
 						}
 					}
 				} else {
-//					System.out.println(paragraph.getParagraphText());
+					// System.out.println(paragraph.getParagraphText());
 				}
 			}
 		}
 		return paraQuestionContentList;
 	}
+
+	/**
+	 * @param docx
+	 * @return
+	 */
 	public static List<String> getAllAnswerContent(XWPFDocument docx) {
 		int index = 0;
 		int indexList = 0;
@@ -430,7 +607,7 @@ public class WordService {
 
 		String mainString = "";
 		String truncateString = "";
-		List<String> paraAnswerContentList = null;
+		List<String> paraAnswerContentList = new ArrayList<String>();
 		List<XWPFParagraph> paragraphList = docx.getParagraphs();
 		for (int indexParagraph = 0; indexParagraph <= paragraphList.size() - 1; indexParagraph++) {
 			XWPFParagraph paragraph = paragraphList.get(indexParagraph);
@@ -438,7 +615,8 @@ public class WordService {
 				if (paragraph.getNumID() != null) {
 					// check indexList to print Part Exam
 					if (indexList == 0) {
-//						System.out.println(Constants.romanNumeral[indexList] + ". " + paragraph.getParagraphText());
+						// System.out.println(Constants.romanNumeral[indexList] + ". " +
+						// paragraph.getParagraphText());
 						index++;
 						indexList++;
 					} else
@@ -455,7 +633,7 @@ public class WordService {
 									if (paragraphList.get(indexPara) != null) {
 										// check next paragraph has NumID or not
 										if (paragraphList.get(indexPara).getNumID() == null) {
-//											mainString = questionNum + ". " + paragraph.getParagraphText();
+											// mainString = questionNum + ". " + paragraph.getParagraphText();
 											mainString = paragraph.getParagraphText();
 											truncateString = truncateString + "\n"
 													+ paragraphList.get(indexPara).getParagraphText();
@@ -468,11 +646,11 @@ public class WordService {
 									}
 
 								}
-//								paraQuestionContentList.add(mainString+truncateString);
-//								System.out.println(mainString + truncateString);
+								// paraQuestionContentList.add(mainString+truncateString);
+								// System.out.println(mainString + truncateString);
 							} else {
-//								paraQuestionContentList.add(paragraph.getParagraphText());
-//								System.out.println(questionNum + ". " + paragraph.getParagraphText());
+								// paraQuestionContentList.add(paragraph.getParagraphText());
+								// System.out.println(questionNum + ". " + paragraph.getParagraphText());
 							}
 							mainString = "";
 							truncateString = "";
@@ -499,12 +677,14 @@ public class WordService {
 										if (paragraphList.get(indexPara) != null) {
 											// check next paragraph has NumID or not
 											if (paragraphList.get(indexPara).getNumID() == null) {
-//												mainString = Constants.ANSWERS[resetAnswer] + ". "
-//														+ paragraph.getParagraphText();
-												mainString=paragraph.getParagraphText();
+												// mainString = Constants.ANSWERS[resetAnswer] + ". "
+												// + paragraph.getParagraphText();
+												mainString = paragraph.getParagraphText();
 												truncateString = truncateString + "\n"
 														+ paragraphList.get(indexPara).getParagraphText();
 												indexParagraph = indexPara;
+												
+												
 											} else {
 												break;
 											}
@@ -512,12 +692,14 @@ public class WordService {
 											break;
 										}
 									}
-									paraAnswerContentList.add(mainString + truncateString);
-//									System.out.println(mainString + truncateString);
+									//check if para is highline
+									
+									paraAnswerContentList.add(Constants.ANSWERS[resetAnswer]+". "+mainString + truncateString);
+									// System.out.println(mainString + truncateString);
 								} else {
-									paraAnswerContentList.add(paragraph.getParagraphText());
-//									System.out.println(
-//											Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+									paraAnswerContentList.add(Constants.ANSWERS[resetAnswer]+". "+paragraph.getParagraphText());
+									// System.out.println(
+									// Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
 								}
 								mainString = "";
 								truncateString = "";
@@ -528,18 +710,20 @@ public class WordService {
 							resetAnswer++;
 							index++;
 						} else {
-							paraAnswerContentList.add(paragraph.getParagraphText());
-//							System.out.println(Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+							paraAnswerContentList.add(Constants.ANSWERS[resetAnswer]+". "+paragraph.getParagraphText());
+							// System.out.println(Constants.ANSWERS[resetAnswer] + ". " +
+							// paragraph.getParagraphText());
 							resetAnswer = 0;
 						}
 					}
 				} else {
-//					System.out.println(paragraph.getParagraphText());
+					// System.out.println(paragraph.getParagraphText());
 				}
 			}
 		}
 		return paraAnswerContentList;
 	}
+
 	public static List<XWPFParagraph> getAllOtherContent(XWPFDocument docx) {
 		int index = 0;
 		int indexList = 0;
@@ -550,7 +734,7 @@ public class WordService {
 
 		String mainString = "";
 		String truncateString = "";
-		List<XWPFParagraph> paraOthersContentList = null;
+		List<XWPFParagraph> paraOthersContentList = new ArrayList<XWPFParagraph>();
 		List<XWPFParagraph> paragraphList = docx.getParagraphs();
 		for (int indexParagraph = 0; indexParagraph <= paragraphList.size() - 1; indexParagraph++) {
 			XWPFParagraph paragraph = paragraphList.get(indexParagraph);
@@ -558,7 +742,8 @@ public class WordService {
 				if (paragraph.getNumID() != null) {
 					// check indexList to print Part Exam
 					if (indexList == 0) {
-//						System.out.println(Constants.romanNumeral[indexList] + ". " + paragraph.getParagraphText());
+						// System.out.println(Constants.romanNumeral[indexList] + ". " +
+						// paragraph.getParagraphText());
 						index++;
 						indexList++;
 					} else
@@ -575,7 +760,7 @@ public class WordService {
 									if (paragraphList.get(indexPara) != null) {
 										// check next paragraph has NumID or not
 										if (paragraphList.get(indexPara).getNumID() == null) {
-//											mainString = questionNum + ". " + paragraph.getParagraphText();
+											// mainString = questionNum + ". " + paragraph.getParagraphText();
 											mainString = paragraph.getParagraphText();
 											truncateString = truncateString + "\n"
 													+ paragraphList.get(indexPara).getParagraphText();
@@ -588,11 +773,11 @@ public class WordService {
 									}
 
 								}
-//								paraQuestionContentList.add(mainString+truncateString);
-//								System.out.println(mainString + truncateString);
+								// paraQuestionContentList.add(mainString+truncateString);
+								// System.out.println(mainString + truncateString);
 							} else {
-//								paraQuestionContentList.add(paragraph.getParagraphText());
-//								System.out.println(questionNum + ". " + paragraph.getParagraphText());
+								// paraQuestionContentList.add(paragraph.getParagraphText());
+								// System.out.println(questionNum + ". " + paragraph.getParagraphText());
 							}
 							mainString = "";
 							truncateString = "";
@@ -619,9 +804,9 @@ public class WordService {
 										if (paragraphList.get(indexPara) != null) {
 											// check next paragraph has NumID or not
 											if (paragraphList.get(indexPara).getNumID() == null) {
-//												mainString = Constants.ANSWERS[resetAnswer] + ". "
-//														+ paragraph.getParagraphText();
-												mainString=paragraph.getParagraphText();
+												// mainString = Constants.ANSWERS[resetAnswer] + ". "
+												// + paragraph.getParagraphText();
+												mainString = paragraph.getParagraphText();
 												truncateString = truncateString + "\n"
 														+ paragraphList.get(indexPara).getParagraphText();
 												indexParagraph = indexPara;
@@ -632,12 +817,12 @@ public class WordService {
 											break;
 										}
 									}
-//									paraAnswerContentList.add(mainString + truncateString);
-//									System.out.println(mainString + truncateString);
+									// paraAnswerContentList.add(mainString + truncateString);
+									// System.out.println(mainString + truncateString);
 								} else {
-//									paraAnswerContentList.add(paragraph.getParagraphText());
-//									System.out.println(
-//											Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+									// paraAnswerContentList.add(paragraph.getParagraphText());
+									// System.out.println(
+									// Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
 								}
 								mainString = "";
 								truncateString = "";
@@ -648,17 +833,42 @@ public class WordService {
 							resetAnswer++;
 							index++;
 						} else {
-//							paraAnswerContentList.add(paragraph.getParagraphText());
-//							System.out.println(Constants.ANSWERS[resetAnswer] + ". " + paragraph.getParagraphText());
+							// paraAnswerContentList.add(paragraph.getParagraphText());
+							// System.out.println(Constants.ANSWERS[resetAnswer] + ". " +
+							// paragraph.getParagraphText());
 							resetAnswer = 0;
 						}
 					}
 				} else {
 					paraOthersContentList.add(paragraph);
-//					System.out.println(paragraph.getParagraphText());
+					// System.out.println(paragraph.getParagraphText());
 				}
 			}
 		}
 		return paraOthersContentList;
 	}
+
+	public static XWPFParagraph readFileAllParagraphIncludeBold(XWPFDocument docx) throws IOException {
+		List<XWPFParagraph> paragraphList = docx.getParagraphs();
+		XWPFParagraph paraClassCode = null;
+		for (XWPFParagraph xwpfParagraph : paragraphList) {
+			if (xwpfParagraph != null && paraClassCode == null) {
+				List<XWPFRun> runlist = xwpfParagraph.getRuns();
+				for (XWPFRun xwpfRun : runlist) {
+					if (xwpfRun != null) {
+						if (xwpfRun.isBold() && xwpfParagraph.getParagraphText().startsWith("MSMH")) {
+							paraClassCode = xwpfParagraph;
+							// System.out.println(xwpfParagraph.getParagraphText());
+							break;
+						}
+
+					}
+				}
+			} else {
+				break;
+			}
+		}
+		return paraClassCode;
+	}
+
 }
