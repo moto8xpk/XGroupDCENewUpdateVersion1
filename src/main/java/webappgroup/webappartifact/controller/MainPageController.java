@@ -116,7 +116,7 @@ public class MainPageController {
 		}
 		// read file docx after upload file
 		try {
-			// this.handleUploadFile(uploadedFiles);
+			// handleUploadFile(uploadedFiles);
 			XWPFDocument docx = WordService.loadFile(uploadedFiles.get(0).getAbsolutePath().toString());
 			// String titleContent = WordService
 			// .getAllPartTitle(docx)
@@ -132,22 +132,21 @@ public class MainPageController {
 			List<String> rightAnswerKeys = new ArrayList<String>();
 
 			int current = 0;
-			int key=0;
+			int key = 0;
 			for (String identifyContent : rightAnswerContentHighLines) {
-				String identifyContentKey=identifyContent.substring(0,1);
+				String identifyContentKey = identifyContent.substring(0, 1);
 				for (int x = key; x <= answerContentList.size() - 1; x++) {
 					String answercontentKey = answerContentList.get(x).substring(0, 1);
 					if (identifyContentKey.equals(answercontentKey) && x <= 3) {
 						rightAnswerKeys.add(answercontentKey);
 						x = 4;
 						current = 3;
-						key=x;
+						key = x;
 						break;
-					}
-					else if (identifyContentKey.equals(answercontentKey)) {
+					} else if (identifyContentKey.equals(answercontentKey)) {
 						rightAnswerKeys.add(answercontentKey);
 						current = current + 4;
-						key=current;
+						key = current;
 						break;
 					}
 				}
@@ -165,18 +164,19 @@ public class MainPageController {
 			String strParaClassCode = paraClassCode.getParagraphText().replace(Constants.FORMAT_CLASS_CODE_FRONT, "")
 					.replace(Constants.FORMAT_CLASS_CODE_END, "");
 			String classCode = strParaClassCode;
-			List<Question> questionList=new ArrayList<Question>();	
+			List<Question> questionList = new ArrayList<Question>();
+			
 			int currents = 0;
 			int getKeyX = 0;
-			// List<Question> questionList=new ArrayList<Question>();
+			
 			for (int y = 0; y <= questionContent.size() - 1; y++) {
 				String questionConten = questionContent.get(y);
 				String rightAnswerKey = rightAnswerKeys.get(y);
 
 				Question question = new Question();
-				String numberQuestion=questionService.getQuestionNumber();
-				int number=Integer.parseInt(numberQuestion);
-				question.setQuestionId(number+2);
+				String numberQuestion = questionService.getQuestionNumber();
+				int number = Integer.parseInt(numberQuestion);
+				question.setQuestionId(number + 2);
 				question.setQuestionContent(questionConten);
 				question.setAnswer(rightAnswerKey);
 				question.setClassId(classCode);
@@ -196,7 +196,7 @@ public class MainPageController {
 						question.setAnswersD(answer);
 						currents = 0;
 						getKeyX = x;
-//						questionService.save(question);
+						// questionService.save(question);
 						questionList.add(question);
 						break;
 					}
@@ -209,64 +209,121 @@ public class MainPageController {
 			e.printStackTrace();
 		}
 		System.out.println("fuck you!");
-		
+
 		model.addAttribute("description", description);
 		model.addAttribute("uploadedFiles", uploadedFiles);
-		File file=new File(uploadedFiles.get(0).getAbsolutePath().toString());
+		File file = new File(uploadedFiles.get(0).getAbsolutePath().toString());
 		try {
-			if(Files.deleteIfExists(file.toPath()))
-			{
+			if (Files.deleteIfExists(file.toPath())) {
 				System.out.println("docx file is deleted");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		return "uploadResult";
 	}
 
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//	public String doUploadDB(List<String> questionContents, List<String> answerList, List<String> rightAnswerKeys,
-//			String classId) {
-//		int current = 0;
-//		int getKeyX = 0;
-//		// List<Question> questionList=new ArrayList<Question>();
-//		for (int y = 0; y <= questionContents.size() - 1; y++) {
-//			String questionContent = questionContents.get(y);
-//			String rightAnswerKey = rightAnswerKeys.get(y);
-//
-//			Question question = new Question();
-//			question.setQuestionContent(questionContent);
-//			question.setAnswer(rightAnswerKey);
-//			question.setClassId(classId);
-//
-//			for (int x = getKeyX; x <= answerList.size() - 1; x++) {
-//				String answer = answerList.get(x);
-//				if (current == 0) {
-//					question.setAnswersA(answer);
-//					current++;
-//				} else if (current == 1) {
-//					question.setAnswersB(answer);
-//					current++;
-//				} else if (current == 2) {
-//					question.setAnswersC(answer);
-//					current++;
-//				} else if (current == 3) {
-//					question.setAnswersD(answer);
-//					current = 0;
-//					getKeyX = x;
-//					questionService.save(question);
-//					break;
-//				}
-//			}
-//		}
-//
-//		return "uploadResult";
-//	}
-
+	// public static void doUploadDB(List<String> questionContents, List<String>
+	// answerList, List<String> rightAnswerKeys,
+	// String classId) {
+	// int current = 0;
+	// int getKeyX = 0;
+	// List<Question> questionList = new ArrayList<Question>();
+	// for (int y = 0; y <= questionContents.size() - 1; y++) {
+	// String questionContent = questionContents.get(y);
+	// String rightAnswerKey = rightAnswerKeys.get(y);
+	//
+	// Question question = new Question();
+	// String numberQuestion = questionService.getQuestionNumber();
+	// int number = Integer.parseInt(numberQuestion);
+	// question.setQuestionId(number + 2);
+	// question.setQuestionContent(questionContent);
+	// question.setAnswer(rightAnswerKey);
+	// question.setClassId(classId);
+	//
+	// for (int x = getKeyX; x <= answerList.size() - 1; x++) {
+	// String answer = answerList.get(x);
+	// if (current == 0) {
+	// question.setAnswersA(answer);
+	// current++;
+	// } else if (current == 1) {
+	// question.setAnswersB(answer);
+	// current++;
+	// } else if (current == 2) {
+	// question.setAnswersC(answer);
+	// current++;
+	// } else if (current == 3) {
+	// question.setAnswersD(answer);
+	// current = 0;
+	// getKeyX = x;
+	// questionList.add(question);
+	// // questionService.save(question);
+	// break;
+	// }
+	// }
+	// }
+	// questionService.save(questionList);
+	// System.out.println("succsess !");
+	// }
+	//
 	// private void handleUploadFile(List<File> uploadedFiles) throws Exception {
+	// // XWPFDocument docx =
+	// // WordService.loadFile(uploadedFiles.get(0).getAbsolutePath().toString());
+	// // // String titleContent = WordService
+	// // // .getAllPartTitle(docx)
+	// // // .get(0)
+	// // // .getParagraphText();
+	// // List<String> questionContent = WordService.getAllQuestionContent(docx);
+	// // List<String> answerContentList = WordService.getAllAnswerContent(docx);
+	// // List<String> allAnswerContent = WordService.getAllAnswerContent(docx);
+	// // List<String> rightAnswerContentHighLines =
+	// // WordService.readFileAllParagraphIncludeHighline(docx);
+	// //
+	// // List<String> answerContents = new ArrayList<String>();
+	// // List<String> answerKeys = new ArrayList<String>();
+	// // List<String> rightAnswerKeys = new ArrayList<String>();
+	// //
+	// // Integer current = 0;
+	// //
+	// // for (String identifyContent : rightAnswerContentHighLines) {
+	// // for (int x = 0; x <= answerContentList.size() - 1; x++) {
+	// // String answercontent = answerContentList.get(x);
+	// // if
+	// (identifyContent.equals(answercontent.substring(answercontent.indexOf(".")
+	// // + 2)) && x <= 3) {
+	// // rightAnswerKeys.add(answercontent.substring(0, 1));
+	// // x = 3;
+	// // current = 3;
+	// // }
+	// // if
+	// (identifyContent.equals(answercontent.substring(answercontent.indexOf(".")
+	// // + 2))) {
+	// // rightAnswerKeys.add(answercontent.substring(0, 1));
+	// // current = current + 4;
+	// // x = current;
+	// // }
+	// // }
+	// //
+	// // }
+	// // for (String answer : allAnswerContent) {
+	// // answerContents.add(answer.substring(3));
+	// // }
+	// //
+	// // for (String answer : allAnswerContent) {
+	// // answerKeys.add(answer.substring(0, 1));
+	// // }
+	// //
+	// // XWPFParagraph paraClassCode =
+	// // WordService.readFileAllParagraphIncludeBold(docx);
+	// // String strParaClassCode =
+	// //
+	// paraClassCode.getParagraphText().replace(Constants.FORMAT_CLASS_CODE_FRONT,
+	// // "")
+	// // .replace(Constants.FORMAT_CLASS_CODE_END, "");
+	// // String classCode = strParaClassCode;
+	//
 	// XWPFDocument docx =
 	// WordService.loadFile(uploadedFiles.get(0).getAbsolutePath().toString());
 	// // String titleContent = WordService
@@ -283,22 +340,23 @@ public class MainPageController {
 	// List<String> answerKeys = new ArrayList<String>();
 	// List<String> rightAnswerKeys = new ArrayList<String>();
 	//
-	// Integer current = 0;
-	//
+	// int current = 0;
+	// int key = 0;
 	// for (String identifyContent : rightAnswerContentHighLines) {
-	// for (int x = 0; x <= answerContentList.size() - 1; x++) {
-	// String answercontent = answerContentList.get(x);
-	// if (identifyContent.equals(answercontent.substring(answercontent.indexOf(".")
-	// + 2)) && x <= 3) {
-	// rightAnswerKeys.add(answercontent.substring(0, 1));
-	// x = 3;
+	// String identifyContentKey = identifyContent.substring(0, 1);
+	// for (int x = key; x <= answerContentList.size() - 1; x++) {
+	// String answercontentKey = answerContentList.get(x).substring(0, 1);
+	// if (identifyContentKey.equals(answercontentKey) && x <= 3) {
+	// rightAnswerKeys.add(answercontentKey);
+	// x = 4;
 	// current = 3;
-	// }
-	// if (identifyContent.equals(answercontent.substring(answercontent.indexOf(".")
-	// + 2))) {
-	// rightAnswerKeys.add(answercontent.substring(0, 1));
+	// key = x;
+	// break;
+	// } else if (identifyContentKey.equals(answercontentKey)) {
+	// rightAnswerKeys.add(answercontentKey);
 	// current = current + 4;
-	// x = current;
+	// key = current;
+	// break;
 	// }
 	// }
 	//
@@ -319,7 +377,7 @@ public class MainPageController {
 	// .replace(Constants.FORMAT_CLASS_CODE_END, "");
 	// String classCode = strParaClassCode;
 	//
-	// this.doUploadDB(questionContent, answerContents, rightAnswerKeys, classCode);
+	// doUploadDB(questionContent, answerContents, rightAnswerKeys, classCode);
 	// }
 
 }
