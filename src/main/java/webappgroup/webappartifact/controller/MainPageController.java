@@ -3,6 +3,8 @@ package webappgroup.webappartifact.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -207,8 +209,21 @@ public class MainPageController {
 			e.printStackTrace();
 		}
 		System.out.println("fuck you!");
+		
 		model.addAttribute("description", description);
 		model.addAttribute("uploadedFiles", uploadedFiles);
+		File file=new File(uploadedFiles.get(0).getAbsolutePath().toString());
+		try {
+			if(Files.deleteIfExists(file.toPath()))
+			{
+				System.out.println("docx file is deleted");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		return "uploadResult";
 	}
 

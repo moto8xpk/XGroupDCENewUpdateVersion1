@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 //import webappgroup.webappartifact.dao.ClassDAO;
 import webappgroup.webappartifact.dao.QuestionService;
 import webappgroup.webappartifact.entity.Question;
+import webappgroup.webappartifact.service.XmlFormatter;
 
 @Controller
 @RequestMapping("/Question/*")
@@ -35,7 +36,7 @@ public class QuestionFormController {
 		 //Get list Deps from model to view
 		 List<Question> listQuestion=questionDAO.getQuestions();
 
-
+		 listQuestion=XmlFormatter.QuestionsFomatter(listQuestion);
 		 
 		 for(Question question: listQuestion)
 		 {

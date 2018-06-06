@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import webappgroup.webappartifact.entity.Question;
 
 @Component
+@Transactional
 public class QuestionDAO {
 
 	@PersistenceContext
@@ -25,7 +26,6 @@ public class QuestionDAO {
 		List<Question> list = query2.getResultList();
 		return list;
 	}
-	@SuppressWarnings("unchecked")
 	public String getQuestionCount() {
 		Query query2 = em.createQuery("SELECT count(questionId) "
 									+ " FROM Question ");
@@ -33,13 +33,11 @@ public class QuestionDAO {
 		return number;
 	}
 
-	@Transactional
 	public void delete(Integer questionId) {
 		Question question = em.getReference(Question.class, questionId);
 		em.remove(question);
 	}
 
-	@Transactional
 	public void save(List<Question> questionList) {
 		EntityManager entityManager=em.getEntityManagerFactory().createEntityManager();
 		Session session=entityManager.unwrap(Session.class);
