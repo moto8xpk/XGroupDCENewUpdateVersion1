@@ -44,6 +44,5 @@ public class QuestionDAO {
 		for (Question question : questionList) {
 			session.save(question);
 		}
-//		em.persist(question);
 	}
 }

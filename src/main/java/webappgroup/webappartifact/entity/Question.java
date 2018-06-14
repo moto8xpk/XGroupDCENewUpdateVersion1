@@ -122,6 +122,18 @@ public class Question {
 		this.answer = answer;
 		this.classId = classId;
 	}
+	
+
+	public Question(String questionContent, String answersA, String answersB, String answersC, String answersD,
+			String classId) {
+		super();
+		this.questionContent = questionContent;
+		this.answersA = answersA;
+		this.answersB = answersB;
+		this.answersC = answersC;
+		this.answersD = answersD;
+		this.classId = classId;
+	}
 
 	public Question() {
 		super();

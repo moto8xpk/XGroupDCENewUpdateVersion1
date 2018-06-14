@@ -21,9 +21,15 @@
 			<a id="btnListQuestion" href="${pageContext.request.contextPath}/Question/list">Questions Page</a>
 			</b>
 			</div>
+			<div id="questionListData">
+			<!-- Show Question List page -->
+			<b>
+			<a id="btnListQuestion" href="${pageContext.request.contextPath}/Exam/test">Exam Page</a>
+			</b>
+			</div>
 			<div id="exportXmlData">
 				<!-- Export xml file -->
-			 	<b><a href="${pageContext.request.contextPath}/Questionlist" id="btnListQuestion" id="listQuestions">Export XML File</a></b>
+			 	<b><a href="${pageContext.request.contextPath}/Exam" id="btnListQuestion" id="listQuestions">Export XML File</a></b>
 			 </div>
 		</div>
 		<div style="clear: both;"></div>
