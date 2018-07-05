@@ -17,12 +17,12 @@ var x = setInterval(function() {
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     // Output the result in an element with id="demo"
-    document.getElementById("demo").innerHTML =
+    document.getElementById("demo").innerHTML ="Time: "+hours + "h " + minutes + "m "+ seconds + "s ";
     //days + "d " +
-    "Time: "+
-    hours + "h "
-    + minutes + "m "
-    + seconds + "s ";
+    
+    
+   
+    
 
     if(distance < 0){
       var submitBtn=document.getElementById("submitBtnForm");

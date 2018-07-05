@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import webappgroup.webappartifact.entity.Question;
+import webappgroup.webappartifact.model.Answer;
+import webappgroup.webappartifact.model.Answer2;
 
 @Component
 @Transactional
@@ -33,6 +35,15 @@ public class QuestionDAO {
 		return number;
 	}
 
+	public String getQuestionAnswer(String quesId) {
+		Integer questionId=Integer.parseInt(quesId);
+		Query query2 = em.createQuery("SELECT answer "
+									+ " FROM Question "
+									+" WHERE questionId= :questionId ").setParameter("questionId", questionId);
+		String list = (String) query2.getSingleResult().toString();
+		return list;
+	}
+	
 	public void delete(Integer questionId) {
 		Question question = em.getReference(Question.class, questionId);
 		em.remove(question);

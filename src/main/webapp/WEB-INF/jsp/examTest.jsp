@@ -4,7 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+		</script>
 		<title>DCE Exam</title>
 
 	<style>
@@ -21,29 +22,30 @@
 			<p id="heading">Exam test</p>
 			<br/>
 
-			<form name="myForm" method="post" id="quiz">
+			<form name="myForm" method="post" id="testform">
 	            <ol>
  				<c:forEach var="ques" items="${questions}">
 	                <li>
+	                <p id="${ques.questionId}" hidden>${ques.questionId}</p>
 	                    <h3><c:out value="${ques.questionContent}"/></h3>
 
 	                    <div>
-	                        <input type="radio" name="question1" id="question-1-answers-A" value="A" />
+	                        <input type="radio" name="question1" class="${ques.questionId}" id="question-1-answers-A" value="a" />
 	                        <label for="question-1-answers-A">A) ${ques.answersA } </label>
 	                    </div>
 
 	                    <div>
-	                        <input type="radio" name="question1" id="question-1-answers-B" value="B" />
+	                        <input type="radio" name="question1" class="${ques.questionId}" id="question-1-answers-B" value="b" />
 	                        <label for="question-1-answers-B">B) ${ques.answersB }</label>
 	                    </div>
 
 	                    <div>
-	                        <input type="radio" name="question1" id="question-1-answers-C" value="C" />
+	                        <input type="radio" name="question1" class="${ques.questionId}" id="question-1-answers-C" value="c" />
 	                        <label for="question-1-answers-C">C) ${ques.answersC }</label>
 	                    </div>
 
 	                    <div>
-	                        <input type="radio" name="question1" id="question-1-answers-D" value="D" />
+	                        <input type="radio" name="question1" class="${ques.questionId}" id="question-1-answers-D" value="d" />
 	                        <label for="question-1-answers-D">D) ${ques.answersD }</label>
 	                    </div>
 	                </li>

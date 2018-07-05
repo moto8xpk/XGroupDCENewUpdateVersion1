@@ -174,9 +174,9 @@ public class MainPageController {
 				String rightAnswerKey = rightAnswerKeys.get(y);
 
 				Question question = new Question();
-				String numberQuestion = questionService.getQuestionNumber();
-				int number = Integer.parseInt(numberQuestion);
-				question.setQuestionId(number + 2);
+//				String numberQuestion = questionService.getQuestionNumber();
+//				int number = Integer.parseInt(numberQuestion);
+//				question.setQuestionId(number + 2);
 				question.setQuestionContent(questionConten);
 				question.setAnswer(rightAnswerKey);
 				question.setClassId(classCode);
